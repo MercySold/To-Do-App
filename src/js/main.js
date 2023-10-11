@@ -1,7 +1,9 @@
 const inputElement = document.querySelector('#title')
 const createBtn = document.querySelector('#create')
 const listElement = document.querySelector('#list')
-
+let tasks = []
+const saveTasks = JSON.parse(localStorage.getItem('tasks'))
+console.log(saveTasks)
 let notes = [
   {
     title: 'cho',
@@ -13,27 +15,14 @@ let notes = [
   },
 ]
 
-localStorage.setItem(notes, JSON.stringify(notes))
-let notesGet = JSON.parse(localStorage.getItem('notes'))
-
-function render() {
-  listElement.innerHTML = ''
-  if (notes.length === 0) {
-    listElement.innerHTML = '<p>Нет элементов</p>'
-  }
-  for (let i = 0; i < notes.length; i++) {
-    listElement.insertAdjacentHTML('beforeend', getNoteTemplate(notes[i], i))
-  }
-}
-render()
-
 createBtn.onclick = function() {
   if (inputElement.value.length === 0) {return}
   const newNote = {
     title: inputElement.value,
     completed: false,
   }
-  notes.push(newNote)
+  tasks.push(newNote)
+  localStorage.setItem('tasks', JSON.stringify(tasks))
   inputElement.value = ''
   render()
 }
@@ -71,4 +60,16 @@ function getNoteTemplate(note, index) {
   `
 }
 
-
+function render() {
+	listElement.innerHTML = ''
+	if (notes.length === 0) {
+		listElement.innerHTML = '<p>Нет элементов</p>'
+	}
+	for (let i = 0; i < notes.length; i++) {
+		listElement.insertAdjacentHTML('beforeend', getNoteTemplate(notes[i], i))
+	}
+  for (let i = 0; i < saveTasks.length; i++) {
+		listElement.insertAdjacentHTML('beforeend', getNoteTemplate(saveTasks[i], i))
+	}
+}
+render()
